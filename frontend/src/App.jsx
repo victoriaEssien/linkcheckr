@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://127.0.0.1:5000/check-links", { url });
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/check-links`, { url });
       setResults(response.data);
     } catch (err) {
       console.error("Error checking links:", err);
