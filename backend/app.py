@@ -12,7 +12,7 @@ from urllib.parse import urljoin, urlparse
 import logging
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:5173", "https://linkcheckr.vercel.app"])
+CORS(app, resources={r"/*": {"origins": ["http://localhost:5173", "https://linkcheckr.vercel.app"]}})
 logging.basicConfig(level=logging.INFO)
 
 def setup_driver():
