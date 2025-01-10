@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Loader2, AlertCircle, ExternalLink } from "lucide-react";
 
 // List of domains that commonly block automated checking
-const RESTRICTED_DOMAINS = ['linkedin.com', 'x.com', 'twitter.com'];
+const RESTRICTED_DOMAINS = ["linkedin.com", "x.com", "twitter.com"];
 
 // Helper function to extract domain from URL
 const getDomain = (url) => {
@@ -15,7 +15,9 @@ const getDomain = (url) => {
 
 // Helper to check if URL is from a restricted domain
 const isRestrictedDomain = (url) => {
-  return RESTRICTED_DOMAINS.some(domain => url.toLowerCase().includes(domain));
+  return RESTRICTED_DOMAINS.some((domain) =>
+    url.toLowerCase().includes(domain)
+  );
 };
 
 export default function App() {
@@ -31,19 +33,22 @@ export default function App() {
     setResults(null);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/check-links`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ url })
-      });
-      
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/check-links`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ url }),
+        }
+      );
+
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to check links');
+        throw new Error(errorData.error || "Failed to check links");
       }
-      
+
       const data = await response.json();
       setResults(data);
     } catch (err) {
@@ -63,34 +68,30 @@ export default function App() {
         </div>
       );
     }
-    return (
-      <div className="text-sm text-red-600">
-        Status: {link.status}
-      </div>
-    );
+    return <div className="text-sm text-red-600">Status: {link.status}</div>;
   };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-          Broken Link Checker
+          LinkCheckr
         </h1>
 
         <form onSubmit={handleSubmit} className="mb-8">
-          <div className="flex gap-2">
+          <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-2">
             <input
               type="url"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder="Enter your site URL (e.g., https://example.com)"
               required
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-4 py-2.5 border border-gray-300 w-full md:w-8/12 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="px-6 py-2.5 md:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
               {loading ? "Checking..." : "Check Links"}
@@ -142,8 +143,8 @@ export default function App() {
                       key={index}
                       className={`p-3 rounded-lg ${
                         isRestrictedDomain(link.url)
-                          ? 'bg-yellow-50 border border-yellow-100'
-                          : 'bg-red-50 border border-red-100'
+                          ? "bg-yellow-50 border border-yellow-100"
+                          : "bg-red-50 border border-red-100"
                       }`}
                     >
                       <div className="flex items-center justify-between gap-2">
@@ -162,7 +163,8 @@ export default function App() {
                       {renderLinkStatus(link)}
                       {isRestrictedDomain(link.url) && (
                         <div className="mt-2 text-sm text-gray-600">
-                          Links from {getDomain(link.url)} cannot be automatically verified. Please check manually.
+                          Links from {getDomain(link.url)} cannot be
+                          automatically verified. Please check manually.
                         </div>
                       )}
                     </div>
